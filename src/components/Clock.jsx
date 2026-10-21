@@ -1,13 +1,9 @@
 import { Component } from 'react'
 
 class Clock extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      time: new Date(),
-      clickCount: 0
-    }
-    console.log('Clock: constructor')
+  state = {
+    time: new Date(),
+    count: 0
   }
 
   componentDidMount() {
@@ -19,8 +15,8 @@ class Clock extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     console.log('Clock: componentDidUpdate')
-    if (prevState.clickCount !== this.state.clickCount) {
-      document.title = `Đã bấm ${this.state.clickCount} lần`
+    if (prevState.count !== this.state.count) {
+      document.title = `Đã bấm ${this.state.count} lần`
     }
   }
 
@@ -29,34 +25,16 @@ class Clock extends Component {
     clearInterval(this.timer)
   }
 
-  handleButtonClick = () => {
-    this.setState((prevState) => ({
-      clickCount: prevState.clickCount + 1
-    }))
-  }
-
   render() {
     console.log('Clock: render')
-    const { time, clickCount } = this.state
-
     return (
       <div className="clock-box">
-        <h4>Đồng hồ thời gian thực</h4>
-        <div className="clock-display">
-          {time.toLocaleTimeString()}
-        </div>
-        <p className="clock-hint">
-          Hãy mở Console (F12) để xem log của các phương thức Lifecycle: constructor, render, componentDidMount, componentDidUpdate, componentWillUnmount.
-        </p>
-        <div className="clock-action">
-          <button
-            type="button"
-            onClick={this.handleButtonClick}
-            className="btn btn-secondary"
-          >
-            Bấm tôi để đổi document.title (Số lần: {clickCount})
-          </button>
-        </div>
+        <h3>{this.state.time.toLocaleTimeString()}</h3>
+        <button
+          onClick={() => this.setState((p) => ({ count: p.count + 1 }))}
+        >
+          Đã bấm: {this.state.count} (Đổi tiêu đề trang)
+        </button>
       </div>
     )
   }

@@ -1,68 +1,48 @@
 import { Component } from 'react'
 
 class StudentList extends Component {
-  handleDelete = (id, name) => {
-    const isConfirmed = window.confirm(`Bạn có chắc chắn muốn xóa sinh viên "${name}" không?`)
-    if (isConfirmed) {
-      this.props.onRemove(id)
-    }
-  }
-
   render() {
-    const { students } = this.props
+    const { items, onRemove } = this.props
 
-    if (students.length === 0) {
-      return (
-        <div className="card">
-          <h3>Danh sách sinh viên</h3>
-          <p className="empty-message">Chưa có sinh viên nào trong danh sách.</p>
-        </div>
-      )
+    if (items.length === 0) {
+      return <p>Chưa có sinh viên</p>
     }
 
     return (
-      <div className="card">
-        <div className="card-header">
-          <h3>Danh sách sinh viên</h3>
-          <span className="badge">Tổng số: {students.length}</span>
-        </div>
-
-        <div className="table-responsive">
-          <table className="student-table">
-            <thead>
-              <tr>
-                <th>STT</th>
-                <th>Họ và tên</th>
-                <th>Email</th>
-                <th>Ngành học</th>
-                <th>GPA</th>
-                <th>Hành động</th>
+      <div className="table-box">
+        <h3>Danh sách sinh viên</h3>
+        <table border="1">
+          <thead>
+            <tr>
+              <th>Họ tên</th>
+              <th>Email</th>
+              <th>Ngành</th>
+              <th>GPA</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((sv) => (
+              <tr key={sv.id}>
+                <td>{sv.name}</td>
+                <td>{sv.email}</td>
+                <td>{sv.major}</td>
+                <td>{sv.gpa}</td>
+                <td>
+                  <button
+                    onClick={() => {
+                      if (window.confirm(`Bạn có chắc muốn xóa sinh viên ${sv.name}?`)) {
+                        onRemove(sv.id)
+                      }
+                    }}
+                  >
+                    Xóa
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {students.map((sv, index) => (
-                <tr key={sv.id}>
-                  <td>{index + 1}</td>
-                  <td><strong>{sv.name}</strong></td>
-                  <td>{sv.email}</td>
-                  <td>
-                    <span className="major-tag">{sv.major}</span>
-                  </td>
-                  <td>{Number(sv.gpa).toFixed(2)}</td>
-                  <td>
-                    <button
-                      type="button"
-                      onClick={() => this.handleDelete(sv.id, sv.name)}
-                      className="btn btn-danger"
-                    >
-                      Xóa
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
       </div>
     )
   }
